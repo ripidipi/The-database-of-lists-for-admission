@@ -1,6 +1,6 @@
 import sqlite3 as sl
 
-def check() -> None:
+def check_students_table() -> None:
     con = sl.connect('entrance.db')
     with con:
         data = con.execute("select count(*) from sqlite_master where type='table' and name='students'")
@@ -10,72 +10,48 @@ def check() -> None:
                     con.execute("""
                         CREATE TABLE students (
                         ID INT PRIMARY KEY,
-                        SCORE INT,
-                        GAVE? BOOL,
-                        WHERE NVARCHAR(100),
-                        COLLEGE1 NVARCHAR(100),
-                                OWN ACHIEVEMENT COLLEGE1 INT,
-                                WAY COLLEGE1 NVARCHAR(100),
-                                DIRECTION1 COLLEGE1 NVARCHAR(300),
-                                DIRECTION2 COLLEGE1 NVARCHAR(300),
-                                DIRECTION3 COLLEGE1 NVARCHAR(300),
-                                DIRECTION4 COLLEGE1 NVARCHAR(300),
-                                DIRECTION5 COLLEGE1 NVARCHAR(300),
-                                PLACE DIRECTION1 COLLEGE1 INT,
-                                PLACE DIRECTION2 COLLEGE1 INT,
-                                PLACE DIRECTION3 COLLEGE1 INT,
-                                PLACE DIRECTION4 COLLEGE1 INT,
-                                PLACE DIRECTION5 COLLEGE1 INT,
-                        COLLEGE2 NVARCHAR(100),
-                                OWN ACHIEVEMENT COLLEGE2 INT,
-                                WAY COLLEGE2 NVARCHAR(100),
-                                DIRECTION1 COLLEGE2 NVARCHAR(300),
-                                DIRECTION2 COLLEGE2 NVARCHAR(300),
-                                DIRECTION3 COLLEGE2 NVARCHAR(300),
-                                DIRECTION4 COLLEGE2 NVARCHAR(300),
-                                DIRECTION5 COLLEGE2 NVARCHAR(300),
-                                PLACE DIRECTION1 COLLEGE2 INT,
-                                PLACE DIRECTION2 COLLEGE2 INT,
-                                PLACE DIRECTION3 COLLEGE2 INT,
-                                PLACE DIRECTION4 COLLEGE2 INT,
-                                PLACE DIRECTION5 COLLEGE2 INT,
-                        COLLEGE3 NVARCHAR(100),
-                                OWN ACHIEVEMENT COLLEGE3 INT,
-                                WAY COLLEGE3 NVARCHAR(100),
-                                DIRECTION1 COLLEGE3 NVARCHAR(300),
-                                DIRECTION2 COLLEGE3 NVARCHAR(300),
-                                DIRECTION3 COLLEGE3 NVARCHAR(300),
-                                DIRECTION4 COLLEGE3 NVARCHAR(300),
-                                DIRECTION5 COLLEGE3 NVARCHAR(300),
-                                PLACE DIRECTION1 COLLEGE3 INT,
-                                PLACE DIRECTION2 COLLEGE3 INT,
-                                PLACE DIRECTION3 COLLEGE3 INT,
-                                PLACE DIRECTION4 COLLEGE3 INT,
-                                PLACE DIRECTION5 COLLEGE3 INT,
-                        COLLEGE4 NVARCHAR(100),
-                                OWN ACHIEVEMENT COLLEGE4 INT,
-                                WAY COLLEGE4 NVARCHAR(100),
-                                DIRECTION1 COLLEGE4 NVARCHAR(300),
-                                DIRECTION2 COLLEGE4 NVARCHAR(300),
-                                DIRECTION3 COLLEGE4 NVARCHAR(300),
-                                DIRECTION4 COLLEGE4 NVARCHAR(300),
-                                DIRECTION5 COLLEGE4 NVARCHAR(300),
-                                PLACE DIRECTION1 COLLEGE4 INT,
-                                PLACE DIRECTION2 COLLEGE4 INT,
-                                PLACE DIRECTION3 COLLEGE4 INT,
-                                PLACE DIRECTION4 COLLEGE4 INT,
-                                PLACE DIRECTION5 COLLEGE4 INT,
-                        COLLEGE5 NVARCHAR(100),
-                                OWN ACHIEVEMENT COLLEGE5 INT,
-                                WAY COLLEGE5 NVARCHAR(100),
-                                DIRECTION1 COLLEGE5 NVARCHAR(300),
-                                DIRECTION2 COLLEGE5 NVARCHAR(300),
-                                DIRECTION3 COLLEGE5 NVARCHAR(300),
-                                DIRECTION4 COLLEGE5 NVARCHAR(300),
-                                DIRECTION5 COLLEGE5 NVARCHAR(300),
-                                PLACE DIRECTION1 COLLEGE5 INT,
-                                PLACE DIRECTION2 COLLEGE5 INT,
-                                PLACE DIRECTION3 COLLEGE5 INT,
-                                PLACE DIRECTION4 COLLEGE5 INT,
-                                PLACE DIRECTION5 COLLEGE5 INT
+                        DIRECTION1 NVARCHAR(511),
+                        DIRECTION2 NVARCHAR(511),
+                        DIRECTION3 NVARCHAR(511),
+                        DIRECTION4 NVARCHAR(511),
+                        DIRECTION5 NVARCHAR(511),
+                        SCORE INT NOT NULL,
+                        GAVE BOOL,
+                        WHERE NVARCHAR(255),
+                        );
                                 """)
+    
+def check_direction_tables(direct_name) -> None:
+    con = sl.connect('entrance.db')
+    with con: 
+        data = con.execute(f"select count(*) from sqlite_master where type='table' and name='{direct_name}'")
+        for row in data:
+            if row[0] == 0:
+                with con:
+                    con.execute(
+                        f"CREATE TABLE {direct_name} (" +
+                        """
+                        ID INT PRIMARY KEY,
+                        PLACE INT NOT NULL,
+                        SCORE INT NOT NULL,
+                        ATESTAT_HERE BOOL,
+                        OWN_PROGRESS INT,
+                        );
+                        """)
+                    
+		
+def check_college_tables(college_name) -> None:
+    con = sl.connect('entrance.db')
+    with con: 
+        data = con.execute(f"select count(*) from sqlite_master where type='table' and name='{college_name}'")
+        for row in data:
+            if row[0] == 0:
+                with con:
+                    con.execute(
+                        f"CREATE TABLE {college_name} (" +
+                        """
+                        ID INT PRIMARY KEY,
+                        DIR_NAME NVARCHAR(511),
+                        Q_PLACE INT
+                        );
+                        """)
