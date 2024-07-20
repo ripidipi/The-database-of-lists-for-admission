@@ -22,7 +22,7 @@ direct = []
 for i in links:
     name = i.find('p')
     q_place = i.find_all('div')
-    d = Direction('D' + str(name)[3:-4].split(' ')[0].replace('.', '_'), str(q_place[1])[5:-6], address + str(i).split()[2][7:34])
+    d = Direction('ITMO' + str(name)[3:-4].split(' ')[0].replace('.', '_'), str(q_place[1])[5:-6], address + str(i).split()[2][7:34])
     # print(str(name)[3:-4].split(' ')[0].replace('.', '#'))
     direct.append(d)
 
@@ -72,6 +72,6 @@ for d in direct:
             except:
                 Id = str(Id)[6:-7]
             d.add_to_table_list_line(int(str(number)[45:i]), Id, way, points - own_achive, own_achive, certificate, int(str(priority)[6:-7]))
-
+    print('dist ', d.name,  " complited")
 
 

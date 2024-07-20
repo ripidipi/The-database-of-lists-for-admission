@@ -11,14 +11,14 @@ def check_students_table() -> None:
                         CREATE TABLE IF NOT EXISTS Students 
                         (
                         id INT PRIMARY KEY,
+                        score INT NOT NULL,
+                        gave BOOL,
+                        place VARCHAR(255),
                         direction1 VARCHAR(511),
                         direction2 VARCHAR(511),
                         direction3 VARCHAR(511),
                         direction4 VARCHAR(511),
-                        direction5 VARCHAR(511),
-                        score INT NOT NULL,
-                        gave BOOL,
-                        place VARCHAR(255)
+                        direction5 VARCHAR(511)
                         )
                                 """)
     con.commit()
@@ -67,7 +67,12 @@ def add_to_direction_tables(direction_name:str, place:int, Id:str, way:str, poin
                           own_achives:int, certificate:bool, prioritery:int) -> None:
     con = sl.connect('entrance.db')
     curs = con.cursor()
-    curs.execute(f'INSERT INTO {direction_name} (place, id, way, score, own_progress, atestat_here, prioritery) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+    data = con.execute(f"select count(*) FROM {direction_name} where id = ?", (Id,))
+    if (str(*data).count('1')):
+        curs.execute(f'UPDATE {direction_name} SET place = ?, way = ?, score = ?, own_progress = ?, atestat_here = ?, prioritery= ? WHERE id = ?', 
+                    (place, way, points, own_achives, certificate, prioritery, Id))
+    else: 
+        curs.execute(f'INSERT INTO {direction_name} (place, id, way, score, own_progress, atestat_here, prioritery) VALUES (?, ?, ?, ?, ?, ?, ?)', 
                     (place, Id, way, points, own_achives, certificate, prioritery))
     con.commit()
     con.close()
